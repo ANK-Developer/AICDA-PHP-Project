@@ -1,0 +1,203 @@
+import { withPageMeta } from "@/components/common/withPageMeta";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { GallerySkeleton } from "@/components/site/GallerySkeleton";
+import { PageShell } from "@/components/site/PageShell";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useGalleryImages } from "@/features/gallery/useGalleryImages";
+import { getMediaUrl } from "@/lib/config";
+
+const PAGE_META = [
+  { title: "Political Achievements · AICDA" },
+  {
+    name: "description",
+    content: "Two and a half decades of policy advocacy that reshaped the Indian dealer landscape.",
+  },
+  {
+    property: "og:title",
+    content: "Political Achievements · AICDA",
+  },
+  {
+    property: "og:description",
+    content: "Two and a half decades of policy advocacy that reshaped the Indian dealer landscape.",
+  },
+];
+
+function imageUrl(image) {
+  const filePath =
+    image?.imageUrl ||
+    image?.url ||
+    image?.secure_url ||
+    image?.image?.url ||
+    image?.image?.secure_url ||
+    "";
+
+  return getMediaUrl(filePath);
+}
+
+const PAGE_SIZE = 12;
+const SEARCH_DEBOUNCE_MS = 400;
+
+function Page() {
+  const [openIndex, setOpenIndex] = useState(null);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  // The server does the searching: ask it only after a short pause in typing.
+  const [query, setQuery] = useState("");
+
+  const appliedQuery = useRef("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const next = search.trim();
+      // Only a real change of the search text goes back to page 1.
+      if (next === appliedQuery.current) return;
+      appliedQuery.current = next;
+      setQuery(next);
+      setPage(1);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  const {
+    images: pageImages,
+    count: total,
+    isLoading: loading,
+    error: loadError,
+  } = useGalleryImages("POLITICAL_ACHIEVEMENT", { page, limit: PAGE_SIZE, search: query });
+  const error = loadError ? loadError.message || "Unable to load images." : "";
+  const current = openIndex !== null ? pageImages[openIndex] : null;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+
+  return (
+    <PageShell
+      title="Political Achievements"
+      subtitle="Two and a half decades of policy advocacy that reshaped the Indian dealer landscape."
+      bannerKey="political-achievements"
+    >
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <label className="relative sm:w-72">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search"
+            className="h-10 w-full rounded-lg border border-border bg-background py-2 pl-9 pr-3 text-sm"
+          />
+        </label>
+        {!loading && !error && (
+          <p className="text-sm font-semibold text-primary">
+            Total Political Achievement Images Found :{" "}
+            <span className="text-foreground">{total}</span>
+          </p>
+        )}
+      </div>
+
+      {loading ? (
+        <GallerySkeleton />
+      ) : error ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">{error}</div>
+      ) : pageImages.length === 0 ? (
+        <div className="py-20 text-center text-muted-foreground">
+          No Political Achievement Images Found
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 px-5 md:px-0 sm:grid-cols-3 lg:grid-cols-3 gap-6">
+          {pageImages.map((item, localIndex) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setOpenIndex(localIndex)}
+              className="group relative overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-card)]"
+            >
+              <img
+                src={imageUrl(item)}
+                alt={item.title}
+                className="aspect-[3/4] h-55 w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+              />
+
+              <span className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-xs sm:text-sm font-semibold px-3 py-2 text-center">
+                {item?.description}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center gap-3 text-sm font-semibold">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage <= 1}
+            className="rounded-lg border border-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="rounded-lg border border-border px-4 py-2 text-muted-foreground">
+            Page : {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage >= totalPages}
+            className="rounded-lg border border-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      <Dialog open={openIndex !== null} onOpenChange={(open) => !open && setOpenIndex(null)}>
+        <DialogContent className="max-w-3xl border-none bg-black p-0 overflow-hidden">
+          <DialogTitle className="sr-only">{current?.title ?? "Political Achievement"}</DialogTitle>
+
+          {current && (
+            <div className="relative">
+              <img
+                src={imageUrl(current)}
+                alt={current.title}
+                className="max-h-[80vh] w-full object-contain bg-black"
+              />
+
+              {pageImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    aria-label="Previous"
+                    onClick={() =>
+                      setOpenIndex((i) => (i - 1 + pageImages.length) % pageImages.length)
+                    }
+                    className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next"
+                    onClick={() => setOpenIndex((i) => (i + 1) % pageImages.length)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                </>
+              )}
+
+              <div className="bg-black/80 px-4 py-3 text-center text-sm font-semibold text-white">
+                {current.title}
+              </div>
+
+              {current.description && (
+                <div className="bg-black px-4 pb-4 text-center text-gray-300 text-sm">
+                  {current.description}
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </PageShell>
+  );
+}
+
+export default withPageMeta(Page, PAGE_META);

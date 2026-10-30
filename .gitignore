@@ -1,0 +1,40 @@
+# Dependencies / build output
+node_modules
+dist
+dist-ssr
+.output
+.vinxi
+.tanstack
+.nitro
+.wrangler/
+.dev.vars
+*.local
+
+# Secrets
+.env
+AICDA-PHP/aicda-config.php
+AICDA-PHP/public_html/api/config.php
+
+# Logs
+logs
+*.log
+
+# Zip files (never commit)
+*.zip
+
+# Deploy package, uploads and local DB data
+AICDA-PHP-deploy/
+AICDA-PHP/public_html/uploads/
+AICDA-PHP-local/mysql-data/
+AICDA-PHP-local/mysql8-data/
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

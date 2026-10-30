@@ -1,0 +1,1004 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import {
+  Check,
+  ChevronDown,
+  EyeOff,
+  Globe,
+  LoaderCircle,
+  Users,
+  UserCheck,
+  UserX,
+} from "lucide-react";
+import { getCitiesForStateName } from "@/lib/india-cities";
+import { getDistrictsForStateName } from "@/lib/india-districts";
+import { confirmToast } from "@/lib/confirm-toast";
+
+const STAT_CARD_ACCENTS = {
+  sky: "bg-sky-50 text-sky-700",
+  emerald: "bg-emerald-50 text-emerald-700",
+  slate: "bg-slate-100 text-slate-500",
+  amber: "bg-amber-50 text-amber-700",
+  violet: "bg-violet-50 text-violet-700",
+};
+
+const STAT_CARD_HOVER_BORDERS = {
+  sky: "hover:border-sky-300",
+  emerald: "hover:border-emerald-300",
+  slate: "hover:border-slate-400",
+  amber: "hover:border-amber-300",
+  violet: "hover:border-violet-300",
+};
+
+export function StatCard({ icon: Icon, label, value, accent = "slate" }) {
+  return (
+    <div
+      className={`
+        group
+        rounded-xl
+        border border-slate-200
+        bg-white
+        p-4
+        shadow-sm
+        transition-all
+        duration-200
+        hover:-translate-y-0.5
+        hover:shadow-md
+        ${STAT_CARD_HOVER_BORDERS[accent]}
+      `}
+    >
+      <div className="flex items-center justify-between gap-4">
+        {/* Left: Icon + Label */}
+        <div className="flex min-w-0 items-center gap-3">
+          <span
+            className={`
+              flex h-11 w-11 shrink-0
+              items-center justify-center
+              rounded-xl
+              transition-transform
+              duration-200
+              group-hover:scale-105
+              ${STAT_CARD_ACCENTS[accent]}
+            `}
+          >
+            <Icon className="h-5 w-5" strokeWidth={2.2} />
+          </span>
+
+          <div className="min-w-0">
+            <p className="truncate text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              {label}
+            </p>
+
+            <p className="mt-1 text-2xl font-bold leading-none tracking-tight text-slate-800">
+              {value ?? 0}
+            </p>
+          </div>
+        </div>
+
+        {/* Small decorative indicator */}
+        <div
+          className={`
+            hidden h-2 w-2 shrink-0
+            rounded-full
+            sm:block
+            ${STAT_CARD_ACCENTS[accent]}
+          `}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Status filters understood by the backend (GET /members and GET /partners).
+// Inactive = Blocked by admin + Expired + Payment pending; they never overlap.
+export const STATUS_FILTERS = [
+  { value: "all", label: "All" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+  { value: "blocked", label: "Blocked by Admin" },
+  { value: "expired", label: "Expired" },
+  { value: "pending", label: "Payment Pending" },
+  { value: "expiring", label: "Expiring Soon" },
+];
+
+export function MemberStatsCards({ stats, noun = "Member" }) {
+  return (
+    <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 xl:grid-cols-6">
+      <StatCard icon={Users} label={`Total ${noun}`} value={stats.total} accent="sky" />
+      <StatCard icon={UserCheck} label={`Active ${noun}`} value={stats.active} accent="emerald" />
+      <StatCard icon={UserX} label={`Inactive ${noun}`} value={stats.inactive} accent="slate" />
+      <StatCard icon={UserX} label="Blocked by Admin" value={stats.blocked ?? 0} accent="violet" />
+      <StatCard icon={UserX} label="Expired" value={stats.expired ?? 0} accent="amber" />
+      <StatCard icon={UserX} label="Payment Pending" value={stats.pending ?? 0} accent="sky" />
+    </div>
+  );
+}
+
+export const STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Chandigarh",
+  "Puducherry",
+  "Andaman and Nicobar Islands",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Lakshadweep",
+];
+
+export const DESIGNATIONS = [
+  "National President",
+  "National Vice President",
+  "National General Secretary",
+  "National Secretary",
+  "Joint Secretary",
+  "Treasurer",
+  "President",
+  "Vice President",
+  "Secretary",
+  "Member",
+  "Partner",
+];
+
+// Strips anything non-numeric as the user types and caps length — backs the
+// Mobile/Aadhaar fields so bad characters never make it into the field at
+// all, instead of only being caught by the server after submit.
+export function digitsOnly(value, maxLength) {
+  const digits = (value || "").replace(/\D/g, "");
+  return maxLength ? digits.slice(0, maxLength) : digits;
+}
+
+export const inputClass =
+  "h-8 w-full rounded-[3px] border border-slate-300 bg-white px-2 text-[13px] text-slate-800 outline-none transition-colors hover:border-slate-400 focus:border-sky-500 focus:ring-1 focus:ring-sky-200";
+
+export const textareaClass =
+  "w-full rounded-[3px] border border-slate-300 bg-white px-2 py-1 text-[13px] text-slate-800 outline-none transition-colors hover:border-slate-400 focus:border-sky-500 focus:ring-1 focus:ring-sky-200";
+
+export function FieldRow({ label, required, error, children }) {
+  return (
+    <div className=" px-3 py-2 transition-colors">
+      <label className="mb-1 block text-[13px] font-semibold text-slate-700">
+        {label} {required && <span className="text-red-600">*</span>}:
+      </label>
+      {children}
+      {error && <p className="mt-1 text-xs font-medium text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+// Appends red-border/focus-ring styles onto inputClass when a field has a
+// validation error, so the input itself flags the problem alongside the
+// message FieldRow renders underneath it.
+export function fieldClass(hasError) {
+  return hasError
+    ? `${inputClass} border-red-400 focus:border-red-500 focus:ring-red-200`
+    : inputClass;
+}
+
+export function SectionHeading({ children }) {
+  return (
+    <h3 className=" px-4 py-2 text-[13px] font-bold uppercase tracking-wide text-slate-500">
+      {children}
+    </h3>
+  );
+}
+
+// Tracks the anchor's on-screen position while a portaled dropdown is open,
+// recomputing on scroll/resize so it stays pinned under the input.
+function useDropdownPosition(open, anchorRef) {
+  const [position, setPosition] = useState(null);
+
+  useEffect(() => {
+    if (!open || !anchorRef.current) {
+      setPosition(null);
+      return;
+    }
+    const update = () => {
+      const rect = anchorRef.current.getBoundingClientRect();
+      setPosition({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+    };
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open, anchorRef]);
+
+  return position;
+}
+
+// Suggestion lists render into a portal (document.body) instead of as an
+// `absolute` child, so they're never clipped — an absolutely positioned
+// dropdown gets cut off the instant its anchor sits inside any scrollable
+// ancestor, which every combobox here does once it's used inside a modal.
+function DropdownPortal({ open, anchorRef, contentRef, children }) {
+  const position = useDropdownPosition(open, anchorRef);
+  if (!open || !position || typeof document === "undefined") return null;
+  return createPortal(
+    <div
+      ref={contentRef}
+      style={{
+        position: "fixed",
+        top: position.top,
+        left: position.left,
+        width: position.width,
+        zIndex: 9999,
+      }}
+    >
+      {children}
+    </div>,
+    document.body,
+  );
+}
+
+// First row of every dropdown ("Select state", "Select city", …) — the default
+// choice that makes it obvious this is a dropdown, and clears the field again.
+function PlaceholderOption({ label, selected, onSelect }) {
+  return (
+    <li>
+      <button
+        type="button"
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={onSelect}
+        className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-slate-400 transition-colors hover:bg-slate-50"
+      >
+        {label}
+        {selected && <Check className="h-3.5 w-3.5 text-sky-600" />}
+      </button>
+    </li>
+  );
+}
+
+// Shared freeform-with-suggestions combobox: text input + filtered dropdown
+// (top N matches), keyboard nav, click-outside close, and a fallback to use
+// whatever was typed if nothing matches. Backs Designation, State, and
+// District; City needs its own variant below since its suggestions come
+// from the backend.
+function SuggestCombobox({ value, onChange, options, placeholder, disabled }) {
+  const [open, setOpen] = useState(false);
+  const [highlighted, setHighlighted] = useState(0);
+  const containerRef = useRef(null);
+  const listRef = useRef(null);
+
+  const filtered = useMemo(() => {
+    const query = value.trim().toLowerCase();
+    // Once a value has been picked, show the full list again (with the pick
+    // marked) so the user can switch — only filter while they're typing.
+    const isSelection = options.some((option) => option.toLowerCase() === query);
+    return query && !isSelection
+      ? options.filter((option) => option.toLowerCase().includes(query))
+      : options;
+  }, [value, options]);
+
+  const openList = () => {
+    setHighlighted(Math.max(filtered.indexOf(value), 0));
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const insideAnchor = containerRef.current?.contains(event.target);
+      const insideList = listRef.current?.contains(event.target);
+      if (!insideAnchor && !insideList) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectOption = (option) => {
+    onChange(option);
+    setOpen(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setOpen(true);
+      setHighlighted((i) => Math.min(i + 1, filtered.length - 1));
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setHighlighted((i) => Math.max(i - 1, 0));
+      return;
+    }
+    if (event.key === "Enter" && open && filtered[highlighted]) {
+      event.preventDefault();
+      selectOption(filtered[highlighted]);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <input
+        value={value}
+        onChange={(event) => {
+          onChange(event.target.value);
+          setHighlighted(0);
+          setOpen(true);
+        }}
+        onFocus={() => !disabled && openList()}
+        onKeyDown={disabled ? undefined : handleKeyDown}
+        placeholder={placeholder}
+        role="combobox"
+        aria-expanded={open}
+        aria-autocomplete="list"
+        disabled={disabled}
+        className={`${inputClass} cursor-pointer pr-8 placeholder:text-slate-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 disabled:placeholder:text-slate-400`}
+      />
+      <button
+        type="button"
+        onClick={() => !disabled && (open ? setOpen(false) : openList())}
+        tabIndex={-1}
+        aria-label="Toggle options"
+        disabled={disabled}
+        className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center text-slate-400 transition-colors hover:text-sky-600 disabled:cursor-not-allowed disabled:hover:text-slate-400"
+      >
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      <DropdownPortal open={open && !disabled} anchorRef={containerRef} contentRef={listRef}>
+        <ul className="max-h-52 w-full origin-top animate-in overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 text-[13px] shadow-xl fade-in-0 zoom-in-95 duration-150">
+          {filtered === options && (
+            <PlaceholderOption
+              label={placeholder}
+              selected={!value}
+              onSelect={() => selectOption("")}
+            />
+          )}
+          {filtered.length === 0 ? (
+            <li className="px-3 py-2 text-slate-400">No matches — press Enter to use “{value}”</li>
+          ) : (
+            filtered.map((option, index) => (
+              <li key={option}>
+                <button
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => selectOption(option)}
+                  onMouseEnter={() => setHighlighted(index)}
+                  className={`flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left transition-all duration-100 ${
+                    index === highlighted
+                      ? "scale-[1.02] bg-sky-50 text-sky-700"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {option}
+                  {option === value && <Check className="h-3.5 w-3.5 text-sky-600" />}
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </DropdownPortal>
+    </div>
+  );
+}
+
+export function DesignationCombobox({ value, onChange }) {
+  return (
+    <SuggestCombobox
+      value={value}
+      onChange={onChange}
+      options={DESIGNATIONS}
+      placeholder="Select designation"
+    />
+  );
+}
+
+export function StateCombobox({ value, onChange }) {
+  return (
+    <SuggestCombobox
+      value={value}
+      onChange={onChange}
+      options={STATES}
+      placeholder="Select state"
+    />
+  );
+}
+
+// City options = every known city of the chosen state (lib/india-cities.js).
+// Typing narrows the list; a name that isn't in it can still be entered freely
+// and is saved as typed.
+export function CityCombobox({ value, onChange, state }) {
+  const [open, setOpen] = useState(false);
+  const [highlighted, setHighlighted] = useState(0);
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const containerRef = useRef(null);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const insideAnchor = containerRef.current?.contains(event.target);
+      const insideList = listRef.current?.contains(event.target);
+      if (!insideAnchor && !insideList) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (!state) {
+      setOptions([]);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    getCitiesForStateName(state)
+      .catch(() => [])
+      .then((cities) => {
+        if (cancelled) return;
+        setOptions(cities);
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [state]);
+
+  const filtered = useMemo(() => {
+    const query = value.trim().toLowerCase();
+    const isSelection = options.some((option) => option.toLowerCase() === query);
+    return query && !isSelection
+      ? options.filter((option) => option.toLowerCase().includes(query))
+      : options;
+  }, [value, options]);
+
+  const openList = () => {
+    setHighlighted(Math.max(filtered.indexOf(value), 0));
+    setOpen(true);
+  };
+
+  const selectOption = (option) => {
+    onChange(option);
+    setOpen(false);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      <input
+        value={value}
+        onChange={(event) => {
+          onChange(event.target.value);
+          setHighlighted(0);
+          setOpen(true);
+        }}
+        onFocus={() => state && openList()}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setOpen(false);
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setOpen(true);
+            setHighlighted((i) => Math.min(i + 1, filtered.length - 1));
+          }
+          if (event.key === "ArrowUp") {
+            event.preventDefault();
+            setHighlighted((i) => Math.max(i - 1, 0));
+          }
+          if (event.key === "Enter") {
+            event.preventDefault();
+            if (open && filtered[highlighted]) selectOption(filtered[highlighted]);
+            else setOpen(false);
+          }
+        }}
+        placeholder={state ? "Select city" : "Select a state first"}
+        role="combobox"
+        aria-expanded={open}
+        aria-autocomplete="list"
+        disabled={!state}
+        className={`${inputClass} cursor-pointer pr-8 placeholder:text-slate-500 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 disabled:placeholder:text-slate-400`}
+      />
+      <button
+        type="button"
+        onClick={() => state && (open ? setOpen(false) : openList())}
+        tabIndex={-1}
+        aria-label="Toggle options"
+        disabled={!state}
+        className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center text-slate-400 transition-colors hover:text-sky-600 disabled:cursor-not-allowed disabled:hover:text-slate-400"
+      >
+        <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      <DropdownPortal open={open && Boolean(state)} anchorRef={containerRef} contentRef={listRef}>
+        <ul className="max-h-52 w-full origin-top animate-in overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 text-[13px] shadow-xl fade-in-0 zoom-in-95 duration-150">
+          {filtered === options && (
+            <PlaceholderOption
+              label="Select city"
+              selected={!value}
+              onSelect={() => selectOption("")}
+            />
+          )}
+          {loading && filtered.length === 0 ? (
+            <li className="flex items-center gap-2 px-3 py-2 text-slate-400">
+              <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> Loading…
+            </li>
+          ) : filtered.length === 0 ? (
+            <li className="px-3 py-2 text-slate-400">
+              No matches{value.trim() ? ` — press Enter to use “${value}”` : ""}
+            </li>
+          ) : (
+            filtered.map((city, index) => (
+              <li key={city}>
+                <button
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => selectOption(city)}
+                  onMouseEnter={() => setHighlighted(index)}
+                  className={`flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left transition-all duration-100 ${
+                    index === highlighted
+                      ? "scale-[1.02] bg-sky-50 text-sky-700"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {city}
+                  {city === value && <Check className="h-3.5 w-3.5 text-sky-600" />}
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </DropdownPortal>
+    </div>
+  );
+}
+
+// Districts for whatever state is currently typed in — disabled until that
+// state resolves to a known Indian state (see getDistrictsForStateName in
+// lib/india-districts.js). Same typeahead combobox as State/Designation
+// instead of a plain <select>, so it matches their look and feel.
+export function DistrictSelect({ value, onChange, districts, disabled }) {
+  return (
+    <SuggestCombobox
+      value={value}
+      onChange={onChange}
+      options={districts}
+      placeholder={disabled ? "Select a state first" : "Select district"}
+      disabled={disabled}
+    />
+  );
+}
+
+export const EMPTY_LOCATION = { state: "", district: "", city: "" };
+
+const locationSelectClass =
+  "h-8 w-full rounded-[3px] border border-slate-200 bg-white px-2 text-[13px] outline-none transition-colors hover:border-slate-400 focus:border-sky-500 focus:ring-1 focus:ring-sky-200 disabled:cursor-wait disabled:opacity-60 sm:w-48";
+
+// State → District → City filter for the admin directories. Options come from
+// the same libraries as the member/partner forms: STATES above, districts from
+// lib/india-districts.js and cities from lib/india-cities.js. Picking a state
+// shows District and City together; the city list is per state (the city
+// dataset has no district information). Picking a state clears district and
+// city; picking a district keeps the chosen city.
+export function LocationFilters({ value, onChange }) {
+  const [cities, setCities] = useState([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const districts = useMemo(() => getDistrictsForStateName(value.state), [value.state]);
+  const active = value.state || value.district || value.city;
+
+  useEffect(() => {
+    if (!value.state) {
+      setCities([]);
+      return;
+    }
+    let cancelled = false;
+    setLoadingCities(true);
+    getCitiesForStateName(value.state)
+      .catch(() => [])
+      .then((list) => {
+        if (cancelled) return;
+        setCities(list);
+        setLoadingCities(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [value.state]);
+
+  return (
+    <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter by location">
+      <select
+        aria-label="Filter by state"
+        value={value.state}
+        onChange={(e) => onChange({ ...EMPTY_LOCATION, state: e.target.value })}
+        className={locationSelectClass}
+      >
+        <option value="">All states</option>
+        {STATES.map((state) => (
+          <option key={state} value={state}>{state}</option>
+        ))}
+      </select>
+
+      {value.state && (
+        <>
+          <select
+            aria-label="Filter by district"
+            value={value.district}
+            onChange={(e) => onChange({ ...value, district: e.target.value })}
+            className={locationSelectClass}
+          >
+            <option value="">All districts</option>
+            {districts.map((district) => (
+              <option key={district} value={district}>{district}</option>
+            ))}
+          </select>
+
+          <select
+            aria-label="Filter by city"
+            value={value.city}
+            onChange={(e) => onChange({ ...value, city: e.target.value })}
+            disabled={loadingCities}
+            className={locationSelectClass}
+          >
+            <option value="">{loadingCities ? "Loading cities…" : "All cities"}</option>
+            {cities.map((city) => (
+              <option key={city} value={city}>{city}</option>
+            ))}
+          </select>
+        </>
+      )}
+
+      {active && (
+        <button
+          type="button"
+          onClick={() => onChange(EMPTY_LOCATION)}
+          className="h-8 rounded-[3px] px-2 text-[13px] font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
+        >
+          Clear location
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Membership validity is calculated by the backend (in IST) and arrives on every
+// member / partner as `record.membership`:
+//   { status: "VALID" | "EXPIRED" | "PENDING", isValid, validFrom, validTo, daysRemaining }
+// The helpers below only read it — nothing here compares dates in the browser.
+
+export function isExpired(record) {
+  return record?.membership?.status === "EXPIRED";
+}
+
+// No validity yet: created but the first payment has not been recorded.
+export function isPaymentPending(record) {
+  return record?.membership?.status === "PENDING";
+}
+
+export const EXPIRING_SOON_DAYS = 7;
+
+// Whole days left from the backend — negative once expired, null while payment
+// is pending.
+export function daysRemaining(record) {
+  return record?.membership?.daysRemaining ?? null;
+}
+
+// Plain-language wording for daysRemaining(): "7 days remaining" /
+// "1 day remaining" / "Expires today" / "Expired" / "Payment pending".
+export function expiryLabel(days) {
+  if (days === null || days === undefined) return "Payment pending";
+  if (days < 0) return "Expired";
+  if (days === 0) return "Expires today";
+  return `${days} day${days === 1 ? "" : "s"} remaining`;
+}
+
+// Tooltip for a status badge: says why a record is Inactive (admin's reason,
+// expired plan or unpaid) — all taken from the backend's status and membership.
+export function statusTitle(record) {
+  if (record?.status?.status === "INACTIVE") {
+    const reason = record.status.reason ? `: ${record.status.reason}` : "";
+    const by = record.status.actionBy ? ` (by ${record.status.actionBy})` : "";
+    return `Inactive by admin${reason}${by}`;
+  }
+  if (isExpired(record)) return "Inactive — plan expired. Renew to make it active.";
+  if (isPaymentPending(record)) return "Inactive — payment pending.";
+  return "Active";
+}
+
+// An Active/Inactive switch can only be used when it changes something: a record
+// that is inactive only because its plan expired (or was never paid) becomes
+// active by renewing, not by this switch. Returns the message to show, or null.
+export function statusToggleBlocker(record, name) {
+  if (record?.status?.status === "INACTIVE") return null;
+  if (isExpired(record)) return `${name} is expired — use Renew to make them active.`;
+  if (isPaymentPending(record))
+    return `${name} has no payment recorded yet — use Renew to make them active.`;
+  return null;
+}
+
+export function isExpiringSoon(record) {
+  return isWithinDays(record, EXPIRING_SOON_DAYS);
+}
+
+// Same idea as isExpiringSoon but with an admin-chosen threshold instead of
+// the fixed default — backs the "Within __ days" input on the filter bar.
+export function isWithinDays(record, days) {
+  const remaining = daysRemaining(record);
+  return remaining !== null && remaining >= 0 && remaining <= days;
+}
+
+// Mirrors every field the Member form collects, except Amount Paid and
+// Note — the form itself labels those two "Optional". Any of the rest left
+// blank marks the profile incomplete. Keyed by the same field name MemberForm
+// uses in its own `form` state, so MemberForm can reuse this list to show a
+// live "still missing" hint as the admin types, instead of only finding out
+// after saving that something didn't count.
+export const PROFILE_FIELD_KEYS = [
+  ["memberId", "Member ID"],
+  ["memberName", "Member Name"],
+  ["fatherName", "Father's Name"],
+  ["photo", "Photo"],
+  ["residentialAddress", "Residential Address"],
+  ["mobile", "Mobile"],
+  ["residentialTelephone", "Residential Telephone"],
+  ["panCardNo", "PAN Card No."],
+  ["designation", "Designation"],
+  ["companyName", "Company Name"],
+  ["companyAddress", "Company Address"],
+  ["state", "State"],
+  ["district", "District"],
+  // City is optional — a blank City never counts toward Profile Incomplete.
+  ["companyTelephone", "Company Telephone"],
+  ["packetNo", "Packet No."],
+  ["aadharNo", "Aadhar Card No."],
+  ["validityTo", "Validity To"],
+];
+
+// The API returns state as a plain string on member records (unlike the
+// object shape used elsewhere for e.g. partner lookups) — fall back to the
+// object form too so this keeps working if that ever changes.
+const PROFILE_FIELD_GETTERS = {
+  state: (m) => m.state,
+};
+
+const PROFILE_REQUIRED_FIELDS = PROFILE_FIELD_KEYS.map(([key, label]) => [
+  label,
+  PROFILE_FIELD_GETTERS[key] || ((m) => m[key]),
+]);
+
+export function getMissingProfileFields(member) {
+  if (!member) return [];
+  return PROFILE_REQUIRED_FIELDS.filter(
+    ([, getField]) => !String(getField(member) || "").trim(),
+  ).map(([label]) => label);
+}
+
+export function isProfileIncomplete(member) {
+  return getMissingProfileFields(member).length > 0;
+}
+
+export function StatusBadge({ active, className = "" }) {
+  return (
+    <span
+      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${active ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-600"} ${className}`}
+    >
+      {active ? "Active" : "Inactive"}
+    </span>
+  );
+}
+
+// A visible on/off switch for the manual Active/Inactive flag — clicking it
+// slides the knob and calls onClick, same as before, just no longer looks
+// like plain colored text.
+// Shown under the Active/Inactive badge when an admin switched the record off.
+export function InactiveReasonNote({ record }) {
+  if (record?.status?.status !== "INACTIVE") return null;
+
+  return (
+    <p className="mt-2 max-w-full rounded-md bg-red-50 px-3 py-2 text-left text-xs text-red-700">
+      <span className="font-semibold">Inactive by admin</span>
+      {record.status.reason ? `: ${record.status.reason}` : ""}
+      {record.status.actionBy ? ` — ${record.status.actionBy}` : ""}
+    </p>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Public-website visibility (isShow). A hidden member / partner stays in the
+// admin directory but is left out of the public Management page and profile link.
+// ---------------------------------------------------------------------------
+
+export function isShownOnSite(record) {
+  return record?.isShow !== false;
+}
+
+// Asks before changing visibility; `kind` is "member" or "partner".
+export function confirmVisibilityChange({ name, shown, kind, onConfirm }) {
+  confirmToast({
+    title: shown
+      ? `Hide ${name || `this ${kind}`} from the public website?`
+      : `Show ${name || `this ${kind}`} on the public website?`,
+    description: shown
+      ? "They stay in Manage Directory, but visitors will no longer see them on the Management page or their profile link. You can show them again any time."
+      : "Visitors will see them on the Management page and their profile link.",
+    confirmLabel: shown ? "Hide" : "Show",
+    onConfirm,
+  });
+}
+
+// Action button: "Hide" (eye with a line) when shown, "Show" (globe) when hidden.
+export function VisibilityButton({ shown, onClick, className = "" }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={shown ? "Hide from the public website" : "Show on the public website"}
+      className={`${className} ${
+        shown
+          ? "text-amber-700 hover:bg-amber-50 hover:text-amber-800"
+          : "text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+      }`}
+    >
+      {shown ? <EyeOff className="h-3.5 w-3.5" /> : <Globe className="h-3.5 w-3.5" />}
+      {shown ? "Hide" : "Show"}
+    </button>
+  );
+}
+
+// Small label shown next to the name of a hidden member / partner.
+export function HiddenBadge() {
+  return (
+    <span
+      title="Not shown on the public website"
+      className="ml-1.5 inline-flex items-center gap-0.5 rounded-full bg-slate-100 px-1.5 py-0.5 align-middle text-[11px] font-semibold text-slate-500"
+    >
+      <EyeOff className="h-3 w-3" /> Hidden
+    </span>
+  );
+}
+
+export function StatusToggle({ active, onClick, title }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      aria-pressed={active}
+      className="inline-flex items-center gap-2"
+    >
+      <span
+        className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${active ? "bg-emerald-500" : "bg-slate-300"}`}
+      >
+        <span
+          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${active ? "translate-x-4" : "translate-x-0.5"}`}
+        />
+      </span>
+      <span className={`text-xs font-semibold ${active ? "text-emerald-700" : "text-slate-600"}`}>
+        {active ? "Active" : "Inactive"}
+      </span>
+    </button>
+  );
+}
+
+export function ProfileIncompleteBadge({ missingFields = [] }) {
+  return (
+    <span
+      title={missingFields.length ? `Missing: ${missingFields.join(", ")}` : undefined}
+      className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700"
+    >
+      Profile Incomplete
+    </span>
+  );
+}
+
+// A renewal is meant to push the validity into the future — a date of today
+// or earlier would save successfully but leave the member/partner expired
+// again immediately, silently undoing the renewal.
+export function isTodayOrPast(dateString) {
+  if (!dateString) return false;
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
+  return date <= today;
+}
+
+// Human-readable but still unique: the name is cosmetic only, the trailing
+// `-<id>` (the internal DB id GET /members/:id already looks up by) is what
+// the details route actually uses — see parseMemberSlug. Duplicate member
+// names never collide because of it.
+export function buildMemberSlug(member) {
+  const slug = (member.memberName || "member")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${slug || "member"}-${member.id}`;
+}
+
+export function parseMemberSlug(slug) {
+  const match = /-(\d+)$/.exec(slug || "");
+  return match ? match[1] : slug;
+}
+
+// Same cosmetic-name + trailing internal-id pattern as buildMemberSlug/
+// parseMemberSlug, applied to partners.
+export function buildPartnerSlug(partner) {
+  const slug = (partner.partnerName || "partner")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${slug || "partner"}-${partner.id}`;
+}
+
+export function parsePartnerSlug(slug) {
+  const match = /-(\d+)$/.exec(slug || "");
+  return match ? match[1] : slug;
+}
+
+// Shareable public-profile links — no auth required to view, backed by the
+// GET /members/public/:id and GET /partners/public/:id endpoints. Uses the
+// current origin so it works the same in dev, staging, and production.
+// Routed under /profile/* rather than /public/* — the latter collides with
+// Vite's convention of serving the project's public/ assets folder at "/".
+export function buildPublicMemberUrl(member) {
+  if (typeof window === "undefined" || !member?.id) return "";
+  return `${window.location.origin}/profile/member/${member.id}`;
+}
+
+export function buildPublicPartnerUrl(partner) {
+  if (typeof window === "undefined" || !partner?.id) return "";
+  return `${window.location.origin}/profile/partner/${partner.id}`;
+}
+
+// navigator.clipboard requires a secure context (HTTPS or localhost) — falls
+// back to the old execCommand trick so "Copy Link" still works over plain
+// HTTP on a LAN, where admins commonly access this dashboard.
+export async function copyTextToClipboard(text) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // fall through to the manual fallback below
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+}

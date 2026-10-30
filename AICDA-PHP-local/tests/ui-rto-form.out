@@ -1,0 +1,30 @@
+1. From the navbar
+  [PASS] home page loads
+  [PASS] 'RTO Form' in the top bar is a link to /rto-form
+  [PASS] the registration number text is still there
+  [PASS] clicking it opens the RTO Form page
+2. Page content
+  [PASS] heading 'RTO Form'
+  [PASS] 'Dear Member,' and the sentence about downloading the forms
+  [PASS] six forms, in the same order as the old page
+  [PASS] each one has a text link and a download icon pointing to the same PDF
+  [PASS] the download icon downloads the file; the text link opens it in a new tab
+3. The PDFs
+  [PASS] Cash Receipt: /rto-forms/cash-receipt.pdf opens as a real PDF (249 KB)
+  [PASS] Form - 26: /rto-forms/form-26.pdf opens as a real PDF (327 KB)
+  [PASS] Form - 28: /rto-forms/form-28.pdf opens as a real PDF (677 KB)
+  [PASS] Form - 29: /rto-forms/form-29.pdf opens as a real PDF (380 KB)
+  [PASS] Form - 30: /rto-forms/form-30.pdf opens as a real PDF (735 KB)
+  [PASS] Insurance Transfer: /rto-forms/insurance-transfer.pdf opens as a real PDF (221 KB)
+4. Look
+  [PASS] the default hero banners are shown (7 slides)
+  [PASS] the sidebar with categories is there
+  [PASS] page is titled 'RTO Form · AICDA'
+5. Direct link + refresh + phone
+  [PASS] opening /rto-form directly (refresh) works
+  [PASS] phone: no sideways scrolling
+  [PASS] phone: every form row fits the screen
+  [PASS] no JavaScript errors
+
+RESULT: 22 passed, 0 failed   (pictures in AICDA-PHP-local/tests/screenshots)
+exit 0

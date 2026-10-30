@@ -1,0 +1,50 @@
+1. First page
+  [PASS] page loads with members
+  [PASS] 10 members/partners on the page
+  [PASS] pagination bar: Showing 1–10 of the total, Page 1 of N
+     (list says total 2623, first IDs: 009, 009A, 0019, 40A)
+  [PASS] Previous is disabled on page 1
+  [PASS] only ONE page-load request was made to the server for this page
+  [PASS] the old 'load everybody' calls are gone (/members/public, /partners/public)
+2. Scrolling is normal
+  [PASS] no box inside the page with its own scrollbar
+  [PASS] the whole page scrolls instead (page is taller than the window)
+     (page holds 10 entries instead of the whole list; off-screen card images: 48)
+3. Photos are complete (not cut)
+  [PASS] photos shown on this page: 8
+  [PASS] every photo box is exactly the same width and height
+  [PASS] the box is medium (between 120-200px wide, 160-260px tall)
+  [PASS] photos use object-fit: contain, so the whole picture is visible (never cut)
+     (8 photos, 5 different original sizes, all shown in 160x208)
+4. Next / Previous
+  [PASS] Next works
+  [PASS] page 2 shows
+  [PASS] page 2 has different people than page 1
+  [PASS] page 2 continues the ID order
+  [PASS] after changing page the list is brought back into view
+  [PASS] the browser asked the server for page=2
+  [PASS] Previous works and returns page 1
+5. Search by ID only
+  [PASS] typing alone does NOT call the server (search runs on Enter / button)
+  [PASS] no suggestion list appears while typing
+  [PASS] Enter searches
+  [PASS] 0560 is found, and 560 is not shown for it
+  [PASS] every result belongs to ID 0560 (the member and its own partner)
+  [PASS] request carried search=0560
+  [PASS] a NAME finds nothing and says so
+  [PASS] no pagination bar when nothing is found
+  [PASS] a MOBILE-looking number finds nothing
+  [PASS] a partner ID finds that partner
+  [PASS] clearing the box brings the full paged list back
+  [PASS] the Search button works too
+6. Phone-size screen
+  [PASS] no sideways scrolling
+  [PASS] search box and Search button fit on screen
+  [PASS] on the phone: photos fit the screen and are all the same size
+  [PASS] pagination bar is visible and fits
+7. Health
+  [PASS] no JavaScript errors
+  [PASS] no failed (4xx/5xx) server requests
+
+RESULT: 37 passed, 0 failed   (screenshots in AICDA-PHP-local/tests/screenshots)
+exit 0

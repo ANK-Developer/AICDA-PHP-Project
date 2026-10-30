@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx eslint *)",
+      "Bash(curl -s \"http://localhost:5005/api/v1/gallery?limit=1\")",
+      "Bash(grep -n \"validityFrom\" \"c:\\\\Users\\\\ekta3\\\\OneDrive\\\\Desktop\\\\AICDA Backend\\\\src\\\\services\\\\partner.service.js\")",
+      "Read(//c/Users/ekta3/OneDrive/Desktop/AICDA Backend/src/services/**)"
+    ]
+  }
+}

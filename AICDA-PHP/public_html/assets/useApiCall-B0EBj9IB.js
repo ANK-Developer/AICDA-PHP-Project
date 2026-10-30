@@ -1,0 +1,1 @@
+import{o as e}from"./jsx-runtime-DVpe7PXp.js";import{t}from"./react-Dps3yNUO.js";var n=e(t(),1),r={selectFromResult:()=>({})};function i(e){let[t]=e(r);return(0,n.useCallback)((e,{fresh:n=!1}={})=>t(e,!n).unwrap(),[t])}function a(e){let[t]=e(r);return(0,n.useCallback)(e=>t(e).unwrap(),[t])}export{a as n,i as t};

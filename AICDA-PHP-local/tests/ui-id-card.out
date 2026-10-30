@@ -1,0 +1,13 @@
+  [PASS] page loads
+  [PASS] card text no longer has 'Validity Upto' (entry 1)
+  [PASS] card text no longer has 'Validity Upto' (entry 2)
+  [PASS] entry 1 (active) says Active
+  [PASS] entry 2 (inactive) says Inactive
+  [PASS] each card has its thumb icon (svg)
+  [PASS] rest of the card is still there (title, name, designation line, signatory)
+  [PASS] Active text is green, Inactive text is red
+     colours: ["oklch(0.596 0.145 163.225)","oklch(0.577 0.245 27.325)"]
+  [PASS] no JavaScript errors
+
+RESULT: 9 passed, 0 failed   (pictures: AICDA-PHP-local/tests/screenshots/card-active.png, card-inactive.png)
+exit 0

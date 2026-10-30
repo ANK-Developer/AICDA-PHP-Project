@@ -1,0 +1,1 @@
+var e=`/api/v1`.replace(/\/api\/v1\/?$/,``),t=t=>t?t.startsWith(`http://`)||t.startsWith(`https://`)?t:`${e}${t}`:``;export{t};

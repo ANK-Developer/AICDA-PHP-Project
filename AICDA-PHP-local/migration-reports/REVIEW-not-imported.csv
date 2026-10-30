@@ -1,0 +1,56 @@
+﻿old_table,old_row,old_id,name,why,father,mobile,company,city,state,designation
+directory,1192,PPPPPPP,"GUDEEP SINGH","old ID ""PPPPPPP"" is not a member number - not guessed","JOGINDER SINGH",9810396505,"DS AUTO","ASHOK VIHAR",Delhi,
+directory,1194,PPPPPPPP,"HIMANSHU CHAWLA","old ID ""PPPPPPPP"" is not a member number - not guessed",K.K.CHAWLA,9873147000,H.C.MOTORS,FARIDABAD,Haryana,
+directory,1856,A2448,"GURDHIAN SINGH","old ID ""A2448"" is not a member number - not guessed","SH.SATISH KUMAR",9896056436,"PREMI CAR BAZAR",KURUKSHETRA,Haryana,
+directory,1962,"OM MOTORS","SANJAY TOMAR","old ID ""OM MOTORS"" is not a member number - not guessed","PREM CHAND TOMAR",9310556313,"OM MOTORS",GAZIABAD,"Uttar Pradesh",
+directory,2426,(1288),"ANKUR VERMA","old ID ""(1288)"" is not a member number - not guessed","RADHEY SHYAM VERMA",9811899658,"KUMAR MOTORS",GAZIABAD,"Uttar Pradesh",
+directory,2427,(1288A),"AMAN VERMA","old ID ""(1288A)"" is not a member number - not guessed","RADHEY SHYAM VERMA",7827045697,"KUMAR MOTORS",GAZIABAD,"Uttar Pradesh",
+directory,2633,1236-1,"PREM CHAND GARG","old ID ""1236-1"" is not a member number - not guessed","RULDURAM GARG",9216643426,"C.P FINANCE CO.",PATRAN,Punjab,
+directory,3056,7I07B,YASEEN,"old ID ""7I07B"" is not a member number - not guessed",,8433215089,"CITY CAR BAZAR",ROORKEE,"Uttarakhand (Uttaranchal)",
+directory,200132,2081-1,"RANJIT SINGH","old ID ""2081-1"" is not a member number - not guessed","SAUTOKU SING",9953277614,"R.S JAGDEV MOTORS","ROSHAN RD.",Delhi,
+directory,52,2366-A,"RAKESH KUMAR","ID 2366A is also used by a different person (KAMAL SINGH, row 2033) - newest kept","PURAN CHAND",9416976866,"BALAJI CAR BAZAR","New Delhi",Delhi,
+directory,303,1860,"CHARANJIT S.AZAD","ID 1860 is also used by a different person (GURDIAL SINGH, row 200057) - newest kept","SH.NIRANJAN SINGH",9815095701,"SHRI SHYAM CAR BAZAR",DISTT.LUDHIANA,Punjab,
+directory,382,2084A,"RAKESH KUMAR","ID 2084A is also used by a different person (HIMANSHU THAKUR, row 2208) - newest kept","SH.PARSH RAM",9213116511,"SHRI BALAJI MOTORS&PROP.",GAZIABAD,"Uttar Pradesh",
+directory,410,2022A,"NAUSHAD MALIK","ID 2022A is also used by a different person (SHADAB ALAM, row 1697) - newest kept","SH.SHAMSHAD AHMED",9319090768,"MALIK CAR BAZAR",BAREILLY,"Uttar Pradesh",
+directory,435,1991A,"ANWAR KHAN","ID 1991A is also used by a different person (RAMESH CHAND, row 1724) - newest kept","SH.MUNNA KHAN",9927337608,"MUNNA MOTORS",MORADABAD,"Uttar Pradesh",
+directory,637,2081-A,"RAM CHANDER SONI","ID 2081A is also used by a different person (MEHUL SONI, row 638) - newest kept","BABU LAL SONI",9829169619,"BHASKAR MOTORS",JAIPUR,Rajasthan,
+directory,806,3232A,"ANIL DILORI","ID 3232A is also used by a different person (PRASHANT ARUN RAKATE, row 1169) - newest kept","SH.MUNSHI RAM",9899667322,"DILORI MOTORS","KAROL BAGH",Delhi,
+directory,849,2419A,"BHURA CHAUDHARY","ID 2419A is also used by a different person (SANDEEP PATWAL, row 2192) - newest kept","LAKHI SINGH",9213431513,"FRIENDS AUTO",DWARKA,Delhi,
+directory,1239,2003A,MOHD.ANAS,"ID 2003A is also used by a different person (MOHD FURQAN, row 1612) - newest kept","HAJI ASLAM",8273958646,"ROYAL MOTORS",MORADABAD,"Uttar Pradesh",
+directory,1294,3050,"JATINDER SINGH","ID 3050 is also used by a different person (HARDEV SINGH, row 1787) - newest kept","SATPAL SINGH",9815369823,"SINGH CAR BAZAR",TANDA,Punjab,
+directory,1415,1888A,"SUNNY BHATIA","ID 1888A is also used by a different person (AKSHAY BHATIA, row 2226) - newest kept","S.K. BHATIA",9871617127,"REYANSH MOTORS","DILSHAD GARDEN",Delhi,
+directory,1778,1686-A,"SANDEEP SINGH","ID 1686A is also used by a different person (MANVINDER SINGH, row 1779) - newest kept","SH.GURMAIL SINGH",9876334584,"EKAM REAL ESTATE&CAR DEALS",BATHINDA,Punjab,
+directory,2199,3701A,"SHAHRUKH NAKVI","ID 3701A is also used by a different person (SHAMSHAD NAVI, row 2219) - newest kept","NOSHAD NAVI",9811484600,"IMPERIAL AUTOMOBILES CONSULTANT",TRILOKPURI,Delhi,
+directory,2324,3762A,"SHADAB ANSARI","ID 3762A is also used by a different person (RAMAN PREET SINGH, row 3092) - newest kept","HAJI NAFIS ANSARI",,"NOOR CAR PALACE",NOORPUR,"Uttar Pradesh",
+directory,2624,1876,"RAJ GARG","ID 1876 is also used by a different person (DEEPAK SINGHLA, row 200060) - newest kept",SH.SHISHPAL,9815264222,"MODERN MOTORS",PATRAN,Punjab,
+management,1,"National President",J.S.Nayol,"old ID ""National President"" is not a member number - not guessed","Lt. M S Nayol",9810027829,"ALL INDIA CAR DEALERS ASSOCIATION (AICDA)","New Delhi",Delhi,"National President AICDA"
+management,7,768,"YASH PAL GROVER","management says ID 768 is YASH PAL GROVER, but in the directory ID 768 is RAJIV GROVER - directory kept","LT. T.N. GROVER",9810021038,"GEE GEE MOTORS","New Delhi",Delhi,"SR. VICE PRESIDENT ALL INDIA"
+management,20,2348,"GOPAL DASS ANEJA","management says ID 2348 is GOPAL DASS ANEJA, but in the directory ID 2348 is TANUJ ANEJA - directory kept","MANGU RAM",9416220589,"GOPAL MOTORS",KURUKSHETRA,Haryana,"VICE PRESIDENT (SHAHBAD)"
+management,39,1366,"AJAY BHATIA","management says ID 1366 is AJAY BHATIA, but in the directory ID 1366 is BALWINDER SINGH - directory kept",P.L.BHATIA,9829008866,"CAR SUPERMART",JAIPUR,Rajasthan,"CHAIRMEN RAJASTHAN"
+management,67,1092,"HARDEEP SINGH","management says ID 1092 is HARDEEP SINGH, but in the directory ID 1092 is LAKHVIR SINGH - directory kept","SH.SAVINDER SINGH",9215305100,"KARAN MOTORS",SIRSA,Haryana,"VICE PRESIDENT-SIRSA"
+management,136,1995,"NEERAJ GUPTA","management says ID 1995 is NEERAJ GUPTA, but in the directory ID 1995 is DINESH GUPTA - directory kept",SH.V.P.GUPTA,9837412487,"SHREE NATH CAR BAZAR",J.P.NAGAR,"Uttar Pradesh","VICE PRESIDENT-AMROHA"
+management,207,1231,"MUKESH KUMAR VERMA","management says ID 1231 is MUKESH KUMAR VERMA, but in the directory ID 1231 is JATINDER GOYAL - directory kept",SH.,9415047606,"NEW SATYAM CAR BAZAR",LAKHIMPUR,"Uttar Pradesh","VICE PRESIDENT -LAKHIMPUR"
+management,139,3098,"VIJAY SINGH","management says ID 3098 is VIJAY SINGH, but in the directory ID 3098 is AJAY SINGH TOMAR - directory kept",LT.SH.V.P.SINGH,9719333884,"NEW DURGA MOTORS",BAREILLY,"Uttar Pradesh",JT.SECRETERY-BAREILLY
+management,154,1876,"AMAN DEEP SINGH","management says ID 1876 is AMAN DEEP SINGH, but in the directory ID 1876 is DEEPAK SINGHLA - directory kept","SH.AMARJEET SINGH",9814232150,"AMAN CAR BAZAR",NAWANSHAHR,Punjab,"VICE PRESIDENT-NAWANSHAHR"
+management,182,1196,"PRASHANT RAMNANI","management says ID 1196 is PRASHANT RAMNANI, but in the directory ID 1196 is ANIKET KULKARNI - directory kept","JAGDISH RAMNANI",9422280030,"MAHALAXMI CONSULTANTS",NASHIK,Maharashtra,SECERATRY-NASHIK
+management,189,1880,"FIRAJ LUHAR","management says ID 1880 is FIRAJ LUHAR, but in the directory ID 1880 is RAJKUMAR - directory kept","SH.IMAMUDIN LUHAR",9824401600,"AMAN AUTO CONSULT","HIMAT NAGAR",Gujarat,STATE.PRESIDENT-GUJRAT
+management,197,02327,"DEEPAK KHANNA","management says ID 02327 is DEEPAK KHANNA, but in the directory ID 02327 is SOHAN LAL KHANNA - directory kept","SH.SOHAN LAL KHURANA",9810343356,"KHANNA MOTORS","NEW DELHI",Delhi,"SR.VICE PRESIDENT-DILSHAD GARDEN"
+management,218,3081,"MAHESH SATIJA","management says ID 3081 is MAHESH SATIJA, but in the directory ID 3081 is JAYANT SATIJA - directory kept","SH.BHIM SAIN",9896100081,"SATIJA MOTORS",KAITHAL,Haryana,"VICE PRESIDENT-HARYANA"
+management,228,2281,"MUBARAK Y. HASOLKAR","management says ID 2281 is MUBARAK Y. HASOLKAR, but in the directory ID 2281 is ABDUL RAWOOF HASOLKAR - directory kept",YUNUS,9821460786,"MAC WHEELZZZ","KHARGHAR -PANVEL",Maharashtra,"VICE PRESIDENT RAIGARH PANVEL"
+management,237,1591,"BHUPINDER SINGH","management says ID 1591 is BHUPINDER SINGH, but in the directory ID 1591 is RANJIT SINGH - directory kept","DARSHAN SINGH `",9814429267,"PUNJAB MOTORS",MOGA,Punjab,"VICE PRESIDENT-MOGA"
+management,244,681,"ROSHAN LAL BABA","management says ID 681 is ROSHAN LAL BABA, but in the directory ID 681 is ATHAR AZIZ - directory kept","KULWANT RAI",9814425465,"BABA CAR BAZAR",DABWALI,Haryana,"VICE PRESIDENT (DABWALI)"
+management,256,1688,"MAJID KHAN","management says ID 1688 is MAJID KHAN, but in the directory ID 1688 is KAJODMAL YADHAN - directory kept","SH.KANA KHAN",9929938147,"IRFAAN CAR BAZAR",SHAHPURA,Rajasthan,"VICE PRESIDENT - AJEETGARH"
+management,260,3636,"VIVEK KR.DIXIT","management says ID 3636 is VIVEK KR.DIXIT, but in the directory ID 3636 is GIRJESH CHANDRA - directory kept","SURESH CHANDRA",9415347043,"SHIV SHAKTI CAR BAZAR",SAHAJAHAPUR,"Uttar Pradesh","VICE PRESIDENT-SAHAJAHAPUR"
+management,270,3458,"GURDEV SINGH","management says ID 3458 is GURDEV SINGH, but in the directory ID 3458 is DEV BABAIN - directory kept","AMAR KAUR",9813013754,"YUVRAJ MOTORS & FINANCE COMPANY",KURUKSHETRA,Haryana,SECY-KURUKSHETRA
+management,279,1579A,"JASWINDER SINGH","management says ID 1579A is JASWINDER SINGH, but in the directory ID 1579A is GURDEEP SINGH - directory kept",,9888604756,"STAR CAR WORLD",HOSHIARPUR,Punjab,"VICE PRESIDENT-HOSHIARPUR"
+management,296,4019,"GURMEET SINGH SAINI","management says ID 4019 is GURMEET SINGH SAINI, but in the directory ID 4019 is SIDDHANT KUMAR - directory kept","MANOHAR SINGH",9814468184,"SAINI CAR POINT",MOHALI,Punjab,
+management,345,3662,"HAR CHAND SINGH","management says ID 3662 is HAR CHAND SINGH, but in the directory ID 3662 is BIKKAR SINGH - directory kept","NANU SINGH",9988796001,"SATGURU MOTORS",GIDDARBAHA,Punjab,
+management,347,1281A,"TERA SINGH","management says ID 1281A is TERA SINGH, but in the directory ID 1281A is MOHINDER SINGH - directory kept","RAB SINGH",9416094534,"SUNSHINE MOTORS",KURUKSHETRA,Haryana,
+management,356,2477A,"GURVINDER SINGH","management says ID 2477A is GURVINDER SINGH, but in the directory ID 2477A is VEERBHAN(DEEPA) - directory kept","PRITAM SINGH",9815440516,"GURU NANAK CAR BAZAR",GURDASPUR,Punjab,
+management,363,1130,"VARINDER VIRK","management says ID 1130 is VARINDER VIRK, but in the directory ID 1130 is AVTAR SINGH - directory kept","SUKHCHAIN SINGH",9988145023,"V.V.FINANCE COMPANY",PATRAN,Punjab,PRESIDENT-DISTT.PATIALA
+management,375,2410A,"UDHAM SINGH","management says ID 2410A is UDHAM SINGH, but in the directory ID 2410A is ABDUL RASHID - directory kept","HARJINDER SINGH",8728000065,"MOHALI CAR BAZAR",MOHALI,CHANDIGARH,"VICE PRESIDENT CHANDIGARH"
+management,391,7122,MOHITT,"management says ID 7122 is MOHITT, but in the directory ID 7122 is MOHIT SONI - directory kept",,9649986408,"KING CAR'S",UDAIPUR,Rajasthan,
+management,406,7140,preeti,"management says ID 7140 is preeti, but in the directory ID 7140 is AKRAM RAZA - directory kept",,,,,null,
+management,418,1400,Designtoonz-1,"management says ID 1400 is Designtoonz-1, but in the directory ID 1400 is JAVED JABBI - directory kept",,,,,Punjab,"from directory"
+management,428,523,"TEJINDER PAL SINGHLA","management says ID 523 is TEJINDER PAL SINGHLA, but in the directory ID 523 is DIMPLE PAL SINGLA - directory kept",,9911144881,"DIMPLE MOTORS",ROHINI,Delhi,"VICE PRESIDENT DELHI"
+management,459,899,"ABHAY DUA","management says ID 899 is ABHAY DUA, but in the directory ID 899 is SURJEET SINGH - directory kept",,9811059361,"CAR CITY","PREET VIHAR",Delhi,

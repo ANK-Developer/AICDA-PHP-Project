@@ -1,0 +1,20 @@
+# AICDA API — every request goes to index.php.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Source and config files are never served directly.
+RewriteRule ^(src|storage)(/|$) - [F,L]
+RewriteRule ^config(\.example)?\.php$ - [F,L]
+
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^ index.php [L]
+</IfModule>
+
+<FilesMatch "(^\.|\.(sql|log|md|ini|env)$)">
+    Require all denied
+</FilesMatch>

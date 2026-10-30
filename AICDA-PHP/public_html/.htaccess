@@ -1,0 +1,92 @@
+# AICDA — public_html
+# React site (index.html + assets/) with the PHP API under /api/v1.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Uncomment once SSL is active on the domain:
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Pass the Authorization header through to PHP (some hosts drop it).
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# The API (api/.htaccess routes it to api/index.php).
+RewriteRule ^api(/|$) - [L]
+
+# Malware left on the old PHP site: make sure those URLs are gone for good.
+RewriteRule ^(wp-[^/]*\.php|wp-admin|wp-includes|wp-content|shop|black_cipher\.php|js/[^/]+\.php|include/|admin/(classes|functions|include|config|js)/) - [G,L,NC]
+
+# Old PHP page URLs → new pages (keeps search engine links working).
+RewriteRule ^index(\.php)?$ / [R=301,L,NC]
+RewriteRule ^About_Us(\.php)?$ /about [R=301,L,NC]
+RewriteRule ^Contact_Us(\.php)?$ /contact [R=301,L,NC]
+RewriteRule ^complaint(\.php)?$ /contact [R=301,L,NC]
+RewriteRule ^Association_Events(\.php)?$ /association-events [R=301,L,NC]
+RewriteRule ^Political_Achievments(\.php)?$ /political-achievements [R=301,L,NC]
+RewriteRule ^Management(\.php)?$ /management [R=301,L,NC]
+RewriteRule ^Member_Detail(\.php)?$ /directory [R=301,L,NC]
+RewriteRule ^(Letter|Js_Nayol)(\.php)?$ /letter [R=301,L,NC]
+RewriteRule ^Our_Staff(\.php)?$ /about [R=301,L,NC]
+RewriteRule ^Our_Office(\.php)?$ /categories/our-office [R=301,L,NC]
+RewriteRule ^Rules(\.php)?$ /categories/rules [R=301,L,NC]
+RewriteRule ^Transferfee(\.php)?$ /categories/transfer-fees [R=301,L,NC]
+RewriteRule ^Transferownership(\.php)?$ /categories/transfer-ownership [R=301,L,NC]
+RewriteRule ^vehiclesafety(\.php)?$ /categories/vehicle-safety [R=301,L,NC]
+RewriteRule ^Importantforms(\.php)?$ /categories/important-forms [R=301,L,NC]
+RewriteRule ^Informationonforms(\.php)?$ /categories/information-on-forms [R=301,L,NC]
+RewriteRule ^Usedvehiclechecklist(\.php)?$ /categories/used-vehicle-checklist [R=301,L,NC]
+RewriteRule ^feesstructure(\.php)?$ /categories/fees-structure [R=301,L,NC]
+RewriteRule ^Obtainnoc(\.php)?$ /categories/obtain-noc [R=301,L,NC]
+RewriteRule ^duplicaterc(\.php)?$ /categories/duplicate-rc [R=301,L,NC]
+RewriteRule ^Newvehicle(\.php)?$ /categories/new-vehicle [R=301,L,NC]
+RewriteRule ^Otherstatevehicle(\.php)?$ /categories/other-state-vehicle [R=301,L,NC]
+RewriteRule ^Newregistrations(\.php)?$ /categories/new-registrations [R=301,L,NC]
+RewriteRule ^Emicalculator(\.php)?$ /categories/emi-calculator [R=301,L,NC]
+RewriteRule ^(Rtolist|Rtoform)(\.php)?$ /categories/rto-list [R=301,L,NC]
+RewriteRule ^Authorizeddealers(\.php)?$ /categories/authorized-dealers [R=301,L,NC]
+RewriteRule ^News(\.php)?$ /categories/news [R=301,L,NC]
+RewriteRule ^admin/.+\.php$ /admin/login [R=301,L,NC]
+
+# Any other .php file is not part of this site.
+RewriteRule \.php$ - [F,L,NC]
+
+# React routes: everything that is not a real file goes to index.html.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+</IfModule>
+
+# Never serve config, database dumps, logs or dotfiles.
+<FilesMatch "(^\.|\.(sql|log|bak|ini|env|md|sh|lock)$|^error_log$|^aicda-config\.php$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # index.html must not be cached so new builds show up immediately.
+    <FilesMatch "^index\.html$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

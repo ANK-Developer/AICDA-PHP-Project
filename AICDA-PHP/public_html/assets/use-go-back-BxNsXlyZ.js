@@ -1,0 +1,1 @@
+import{o as e}from"./jsx-runtime-DVpe7PXp.js";import{t}from"./react-Dps3yNUO.js";import{C as n,S as r}from"./index-CXECB6AG.js";var i=e(t(),1);function a(e){let t=n(),a=r();return(0,i.useCallback)(()=>{a.key==="default"?t(e,{replace:!0}):t(-1)},[t,a.key,e])}export{a as t};

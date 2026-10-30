@@ -1,0 +1,42 @@
+1. Default view
+  [PASS] page loads with the big notice image
+  [PASS] the image is big (768x987, original 700x900)
+  [PASS] the whole image is in proportion (not stretched)
+  [PASS] search box is there
+  [PASS] no member info is shown yet
+  [PASS] nothing was requested from the server for the member list
+  [PASS] old 'Dealer Directory' gallery search is gone
+2. ID-card samples under the sidebar
+  [PASS] exactly one card image is in the sidebar (the downloaded card)
+  [PASS] they sit BELOW the categories list
+  [PASS] they have an 'Identity Card' heading
+  [PASS] the card image loads
+  [PASS] the hero shows banners (7 slides, dots to switch)
+  [PASS] they are the built-in banners, not anything uploaded to a Directory section
+3. Search a member ID
+  [PASS] info shows
+  [PASS] the big image is hidden while info is shown
+  [PASS] it is member 0560 (and its partner), not 560
+  [PASS] details are there (name, address, mobile ...)
+  [PASS] the same Download / Share buttons as Management are there
+  [PASS] a Back button is shown
+  [PASS] the sidebar card stays
+4. Back
+  [PASS] Back brings the big image back
+  [PASS] and empties the search box
+5. Search a partner ID
+  [PASS] a partner ID shows that partner (0560A) - or says not found if there is none
+6. Not found / by name
+  [PASS] a name is not searchable: it says not found
+  [PASS] the notice image is not shown on a failed search
+  [PASS] clearing the box brings the big image back
+  [PASS] an ID that does not exist says not found
+  [PASS] Back works from the not-found view too
+7. Phone-size screen
+  [PASS] no sideways scrolling
+  [PASS] search box and button fit
+  [PASS] the big image fits the screen
+8. Health
+  [PASS] no JavaScript errors
+
+RESULT: 32 passed, 0 failed   (pictures in AICDA-PHP-local/tests/screenshots)

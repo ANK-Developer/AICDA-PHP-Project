@@ -1,0 +1,1 @@
+var e=`/assets/logoAICDA-Dc7Kwaeh.png`;export{e as t};

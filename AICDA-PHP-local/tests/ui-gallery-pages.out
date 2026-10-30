@@ -1,0 +1,88 @@
+
+/association-events
+  [PASS] page loads with 12 items
+  [PASS] total shown = 441
+  [PASS] pagination says Page 1 of 37
+  [PASS] the browser asked the server for page=1&limit=12 (not the whole list)
+  [PASS] Next works
+  [PASS] page 2 shows other items
+  [PASS] page 2 holds different items than page 1
+  [PASS] the browser asked the server for page=2
+  [PASS] Prev goes back to page 1
+  [PASS] clicking an item opens the big view
+  [PASS] the arrow shows the next item of this page
+  [PASS] search "11th" shows the total from the server (32)
+  [PASS] typing letter by letter did not fire a request per letter (waits for a pause)
+  [PASS] the last request carried the whole word
+  [PASS] the search box did not lose focus or get reset
+  [PASS] results are on page 1 again
+  [PASS] a word that is nowhere shows the 'No ... Found' message
+  [PASS] the search box is still there after an empty result
+  [PASS] clearing the box brings everything back
+
+/political-achievements
+  [PASS] page loads with 12 items
+  [PASS] total shown = 137
+  [PASS] pagination says Page 1 of 12
+  [PASS] the browser asked the server for page=1&limit=12 (not the whole list)
+  [PASS] Next works
+  [PASS] page 2 shows other items
+  [PASS] page 2 holds different items than page 1
+  [PASS] the browser asked the server for page=2
+  [PASS] Prev goes back to page 1
+  [PASS] clicking an item opens the big view
+  [PASS] the arrow shows the next item of this page
+  [PASS] search "Congress" shows the total from the server (3)
+  [PASS] typing letter by letter did not fire a request per letter (waits for a pause)
+  [PASS] the last request carried the whole word
+  [PASS] the search box did not lose focus or get reset
+  [PASS] results are on page 1 again
+  [PASS] a word that is nowhere shows the 'No ... Found' message
+  [PASS] the search box is still there after an empty result
+  [PASS] clearing the box brings everything back
+
+/letter
+  [PASS] page loads with 12 items
+  [PASS] total shown = 182
+  [PASS] pagination says Page 1 of 16
+  [PASS] the browser asked the server for page=1&limit=12 (not the whole list)
+  [PASS] Next works
+  [PASS] page 2 shows other items
+  [PASS] page 2 holds different items than page 1
+  [PASS] the browser asked the server for page=2
+  [PASS] Prev goes back to page 1
+  [PASS] clicking an item opens the big view
+  [PASS] the arrow shows the next item of this page
+  [PASS] search "press" shows the total from the server (4)
+  [PASS] typing letter by letter did not fire a request per letter (waits for a pause)
+  [PASS] the last request carried the whole word
+  [PASS] the search box did not lose focus or get reset
+  [PASS] results are on page 1 again
+  [PASS] a word that is nowhere shows the 'No ... Found' message
+  [PASS] the search box is still there after an empty result
+  [PASS] clearing the box brings everything back
+
+/image
+  [PASS] page loads with 12 items
+  [PASS] total shown = 23
+  [PASS] pagination says Page 1 of 2
+  [PASS] the browser asked the server for page=1&limit=12 (not the whole list)
+  [PASS] Next works
+  [PASS] page 2 shows other items
+  [PASS] page 2 holds different items than page 1
+  [PASS] the browser asked the server for page=2
+  [PASS] Prev goes back to page 1
+  [PASS] clicking an item opens the big view
+  [PASS] the arrow shows the next item of this page
+  [PASS] the Video button can be clicked
+  [PASS] Video total = 0
+  [PASS] request carried resourceType=VIDEO
+  [PASS] 'Image' filter shows 23 photos
+  [PASS] 'All' shows everything
+
+Health
+  [PASS] no JavaScript errors
+  [PASS] no failed (4xx/5xx) gallery requests
+
+RESULT: 75 passed, 0 failed
+exit 0
